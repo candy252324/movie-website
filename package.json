@@ -1,0 +1,27 @@
+{
+  "dependencies": {
+    "express": "^4.16.3",
+    "jade": "^1.11.0",
+    "moment": "^2.22.2",
+    "mongoose": "^5.2.2",
+    "underscore": "^1.9.1"
+  },
+  "name": "movie-website",
+  "description": "node,jade,mongodb",
+  "version": "1.0.0",
+  "main": "app.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/candy252324/movie-website.git"
+  },
+  "author": "candy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/candy252324/movie-website/issues"
+  },
+  "homepage": "https://github.com/candy252324/movie-website#readme"
+}

@@ -1,0 +1,13 @@
+//继承layout
+extends ../layout
+block content
+    .container
+        .row
+            each item in movies
+                .col-md-2
+                    .thumbnail(style="text-align:center;")
+                        a(href="/movie/#{item._id}")
+                            img(src='#{item.poster}',alt='#{item.title}',style='width:100px;height:100px;')
+                        .caption
+                            h3 #{item.title}
+                            p: a.btn.btn-primary(href="/movie/#{item._id}",role='button') 观看预告片
