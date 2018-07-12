@@ -48,6 +48,10 @@ console.log("server started on port:"+ port)
 
 app.get('/',function (req,res) {
   console.log(req.session.user)
+  var _user=req.session.user;
+  if(_user){
+    app.locals.user=_user;  // 将当前登陆的用户信息存到本地变量，供页面使用，欢迎您,xxx
+  }
   Movie.fetch((err,doc)=>{
     if(err){
       console.log(err)
@@ -112,6 +116,12 @@ app.post('/user/signin',function (req,res) {
 
 })
 
+//登出
+app.get("/logout",function (req,res) {
+  delete req.session.user  // 删除session,并重定向到首页
+  delete app.locals.user   // 清空本地变量上的user
+  res.redirect("/")
+})
 
 app.get('/admin/userList',function (req,res) {
   User.fetch((err,doc)=>{
