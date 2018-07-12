@@ -23,7 +23,7 @@ mongoose.connection.on('disconnected',()=>{
   console.log("数据库断开连接")
 })
 
-app.set("views","./views/pages")   //设置视图根目录
+app.set("views","./app/views/pages")   //设置视图根目录
 app.set("view engine","jade")   //设置视图模板引擎
 app.use(bodyParser.urlencoded({ extended: true }))
 
@@ -35,6 +35,15 @@ app.use(session({
     collection:"sessions"  // 数据库中新建一个sessions集合，用于存储session
   })
 }))
+
+// 开发环境配置
+if('development'===app.get("env")){
+  app.set("showStackError",true)  // 有错误，则在屏幕上打印
+  var logger=require("morgan")
+  app.use(logger(":method :url :status"))  // 打印每一次请求方法，地址，状态
+  app.locals.pretty=true;   //开发环境代码不压缩，增强可读性
+  mongoose.set("debug",true)
+}
 
 require("./config/routes")(app)   // 将app作为参数传入
 app.use(express.static(path.join(__dirname,'public')))
