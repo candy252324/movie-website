@@ -6,10 +6,16 @@ var Movie=require("./models/movie")
 var User=require("./models/user")
 var _=require('underscore')
 var bodyParser = require('body-parser')  // 中间件，将post请求body中的内容格式化为一个对象
+
+var cookieParser = require('cookie-parser')
+var session = require('express-session')
+var mongoStore=require("connect-mongo")(session)
+
 var port=process.env.PORT||3000
 var app=express()   //启动web服务器
 
-mongoose.connect('mongodb://localhost/movies')
+var dbUrl='mongodb://localhost/movies'
+mongoose.connect(dbUrl)
 mongoose.connection.on('connected',()=>{
   console.log("数据库连接成功")
 })
@@ -23,6 +29,16 @@ mongoose.connection.on('disconnected',()=>{
 app.set("views","./views/pages")   //设置视图根目录
 app.set("view engine","jade")   //设置视图模板引擎
 app.use(bodyParser.urlencoded({ extended: true }))
+
+app.use(cookieParser())  // session依赖于cookieParser
+app.use(session({
+  secret:"movieWebsite",    //secret值用于防止篡改cookie
+  store:new mongoStore({
+    url:dbUrl,    // 当前mongodb数据库地址
+    collection:"sessions"  // 数据库中新建一个sessions集合，用于存储session
+  })
+}))
+
 app.use(express.static(path.join(__dirname,'public')))
 app.locals.moment=require('moment')
 app.listen(port)
@@ -31,6 +47,7 @@ console.log("server started on port:"+ port)
 
 
 app.get('/',function (req,res) {
+  console.log(req.session.user)
   Movie.fetch((err,doc)=>{
     if(err){
       console.log(err)
@@ -52,8 +69,8 @@ app.post('/user/signup',function (req,res) {
       console.log(err)
     }
     //重复
-    if(user){
-      return res.redirect('/')
+    if(user.length){
+      return res.redirect('/admin/userList')
       //不重复
     }else{
       var user=new User(_user);    // 创建一条新数据
@@ -67,6 +84,34 @@ app.post('/user/signup',function (req,res) {
   })
 
 })
+
+// 登陆
+app.post('/user/signin',function (req,res) {
+  var _user=req.body.user;
+  var name=_user.name
+  var password=_user.password
+  User.findOne({name:name},function (err,user) {
+    if(err){
+      console.log(err)
+    }
+    if(!user){
+      return res.redirect('/')
+    }
+    user.comparePassword(password,function (err,isMatch) {
+      if(err){
+        console.log(err)
+      }
+      if(isMatch){
+        req.session.user=user    // 将user存入session
+        return res.redirect('/')
+      }else{
+        return res.redirect('/')
+      }
+    })
+  })
+
+})
+
 
 app.get('/admin/userList',function (req,res) {
   User.fetch((err,doc)=>{

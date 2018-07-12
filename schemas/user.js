@@ -45,6 +45,18 @@ UserSchema.pre('save',function(next){
   })
 })
 
+//添加实例方法
+UserSchema.methods={
+  // 第一个参数为用户提交过来的数据
+  comparePassword:function (_password,cb) {
+    // this指向当前实例
+    bcrypt.compare(_password,this.password,function (err,isMatch) {
+      if(err) return cb(err)
+      cb(null,isMatch)
+    })
+  }
+}
+
 //添加静态方法
 UserSchema.statics={
   //fetch,用于查找出所有数据并按updateAt进行排序
