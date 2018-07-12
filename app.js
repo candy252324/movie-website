@@ -46,12 +46,19 @@ app.listen(port)
 console.log("server started on port:"+ port)
 
 
-app.get('/',function (req,res) {
-  console.log(req.session.user)
+// 会话逻辑预处理,相当于一个全局拦截
+app.use(function (req,res,next) {
+  console.log(123)
   var _user=req.session.user;
   if(_user){
     app.locals.user=_user;  // 将当前登陆的用户信息存到本地变量，供页面使用，欢迎您,xxx
   }
+  return next()
+})
+
+
+app.get('/',function (req,res) {
+  console.log(req.session.user)
   Movie.fetch((err,doc)=>{
     if(err){
       console.log(err)
