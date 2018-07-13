@@ -13,9 +13,14 @@ MongoDB中没有join的特性，因此无法使用join进行表的连接和关�
 
 */
 var CommentSchema=new Schema({
-  movie:{type:ObjectId, ref:'Movie'},  //评论的是哪部电影
-  from:{type:ObjectId, ref:'User'},  // 谁评论的
-  to:{type:ObjectId, ref:'User'},  // 评论的谁
+  movie:{type:ObjectId, ref:'Movie'},  //主评论评论的是哪部电影
+  from:{type:ObjectId, ref:'User'},  // 主评论的评论者
+  reply:[{                          // 主评论下的互相回复
+    from:{type:ObjectId,ref:"User"}, // 回复者的id
+    to:{type:ObjectId,ref:"User"},   // 被回复者的id
+    content:String,
+  }],
+
   content:String, // 评论的内容
   meta:{
     createAt:{

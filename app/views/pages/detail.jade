@@ -14,24 +14,36 @@ block content
                             each item in comments
                                 li.media
                                     .pull-left
-                                        img.media-object(src="/image/header.jpg")
+                                        //cid该条评论id,tid评论者id
+                                        a.comment(href="#comments",data-cid="#{item._id}",data-tid="#{item.from._id}")
+                                            img.media-object(src="/image/header.jpg")
                                     .media-body
+                                        //评论者名字
                                         h4.media-heading #{item.from.name}
                                         p #{item.content}
-                                        //.media
-                                        //    .pull-left
-                                        //        img.media-object(src="/image/header.jpg")
-                                        //    .media-body
-                                        //        h4.media-heading Scott
-                                        //        p Realy nice!
+                                        if item.reply && item.reply.length>0
+                                            each reply in item.reply
+                                                .media
+                                                    .pull-left
+                                                        a.comment(href="#comments",data-cid="#{item._id}",data-tid="#{reply.from._id}")
+                                                            img.media-object(src="/image/header.jpg")
+                                                    .media-body
+                                                        h4.media-heading
+                                                            | #{reply.from.name}
+                                                            small.text-info &nbsp;回复&nbsp;
+                                                            | #{reply.to.name}
+                                                        p #{reply.content}
                                     hr
-
-                form(method="POST",action="/user/comment")
-                    input(type="hidden",name="comment[movie]",value="#{movie._id}")
-                    input(type="hidden",name="comment[from]",value="#{user._id}")
-                    .form-group
-                        textarea.form-control(name="comment[content]",row="3")
-                    button.btn.btn-primary(type="submit") 提交
+                #comments
+                    form#commentForm(method="POST",action="/user/comment")
+                        //电影id
+                        input(type="hidden",name="comment[movie]",value="#{movie._id}")
+                        //当前登陆用户id
+                        input(type="hidden",name="comment[from]",value="#{user._id}")
+                        // 被回复的评论id和被评论的人的id对应的隐藏表单域，由js动态插入
+                        .form-group
+                            textarea.form-control(name="comment[content]",row="3")
+                        button.btn.btn-primary(type="submit") 提交
             .col-md-5
                 dl.dl-horizontal
                     dt 电影名字
@@ -47,4 +59,6 @@ block content
                     dt 简介
                     dd=movie.summary
 
+
+    script(src="/js/details.js",type="text/javascript")
 
