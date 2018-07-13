@@ -77,3 +77,21 @@ exports.list=function (req,res) {
     })
   })
 }
+
+// 中间件，权限控制，必须登陆才可以往下走
+exports.signinRequeired=function (req,res,next) {
+  var user=req.session.user;
+  if(!user){
+    return res.redirect('/signin')
+  }
+  next()
+}
+
+// 中间件，权限控制，权限等级必须大于10才可以往下走
+exports.adminRequired=function (req,res,next) {
+  var user=req.session.user;
+  if(user.role<=10){
+    return res.redirect('/signin')
+  }
+  next()
+}

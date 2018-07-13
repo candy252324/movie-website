@@ -20,15 +20,15 @@ module.exports=function (app) {
   app.get("/signin",User.showSignin)
   app.get("/signup",User.showSignup)
   app.get("/logout",User.logout)
-  app.get('/admin/userList',User.list)
+  app.get('/admin/user/list',User.signinRequeired, User.adminRequired, User.list)  // 权限控制，（必须登陆，且必须有权限才可以访问User.list）
 
   //Movie
   app.get('/movie/:id',Movie.detail)
-  app.get('/admin/movie',Movie.new)
-  app.get('/admin/update/:id',Movie.update)
-  app.post("/admin/movie/new",Movie.save)
-  app.get('/admin/list',Movie.list)
-  app.delete("/admin/list",Movie.del)
+  app.get('/admin/movie/new',User.signinRequeired, User.adminRequired,Movie.new)
+  app.get('/admin/movie/update/:id',User.signinRequeired, User.adminRequired,Movie.update)
+  app.post("/admin/movie",User.signinRequeired, User.adminRequired,Movie.save)
+  app.get('/admin/movie/list',User.signinRequeired, User.adminRequired,Movie.list)
+  app.delete("/admin/movie/list",User.signinRequeired, User.adminRequired,Movie.del)
 }
 
 

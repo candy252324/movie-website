@@ -1,7 +1,7 @@
 extends ../layout
 block content
     .container
-        form.form-horizontal(method="post",action="/admin/movie/new")
+        form.form-horizontal(method="post",action="/admin/movie")
             //隐藏的表单域，存储电影id,用于更新电影数据
             input(type="hidden",name="movie[_id]",value="#{movie._id}")
             .form-group

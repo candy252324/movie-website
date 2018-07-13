@@ -1,7 +1,6 @@
 var Movie=require("../models/movie")
 
 exports.index=function (req,res) {
-  console.log(req.session.user)
   Movie.fetch((err,doc)=>{
     if(err){
       console.log(err)
