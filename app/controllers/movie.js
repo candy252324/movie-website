@@ -12,7 +12,6 @@ exports.detail=function (req,res) {
   })
 }
 
-
 exports.new=function (req,res) {
   res.render('admin',{
     title:"后台录入页",
@@ -29,11 +28,6 @@ exports.new=function (req,res) {
   })
 }
 
-
-// 后台修改页
-// app.get('/admin/update/:id',(req,res)=>{
-//
-// })
 exports.update=function (req,res) {
   var id=req.params.id;
   if(id){
@@ -45,11 +39,6 @@ exports.update=function (req,res) {
     })
   }
 }
-
-// 后台录入post提交
-// app.post("/admin/movie/new",(req,res)=>{
-//
-// })
 
 exports.save=function (req,res) {
   var id=req.body.movie._id;
@@ -90,9 +79,6 @@ exports.save=function (req,res) {
   }
 }
 
-// app.get('/admin/list',function (req,res) {
-//
-// })
 exports.list=function (req,res) {
   Movie.fetch((err,doc)=>{
     if(err){
@@ -105,9 +91,6 @@ exports.list=function (req,res) {
   })
 }
 
-// app.delete("/admin/list",function (req,res) {
-//
-// })
 exports.del=function (req,res) {
   var id=req.query.id;
   if(id){

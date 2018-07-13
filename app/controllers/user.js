@@ -1,5 +1,17 @@
 var User=require("../models/user")
 
+exports.showSignin=function (req,res) {
+  res.render('signin',{
+    title:"登陆",
+  })
+}
+
+exports.showSignup=function (req,res) {
+  res.render('signup',{
+    title:"注册",
+  })
+}
+
 exports.signup=function (req,res) {
   var _user=req.body.user;
   //查找用户名是否重复
@@ -9,7 +21,7 @@ exports.signup=function (req,res) {
     }
     //重复
     if(user.length){
-      return res.redirect('/admin/userList')
+      return res.redirect('/signin')  // 存在的用户，重定向到登陆页面
       //不重复
     }else{
       var user=new User(_user);    // 创建一条新数据
@@ -17,7 +29,7 @@ exports.signup=function (req,res) {
         if(err){
           console.log(err)
         }
-        res.redirect("/admin/userList")    // 重定向到首页
+        res.redirect("/")    // 注册成功，重定向到首页
       })
     }
   })
@@ -32,7 +44,7 @@ exports.signin=function (req,res) {
       console.log(err)
     }
     if(!user){
-      return res.redirect('/')
+      return res.redirect('/signup')  // 不存在的用户，重定向到注册页面
     }
     user.comparePassword(password,function (err,isMatch) {
       if(err){
@@ -42,26 +54,17 @@ exports.signin=function (req,res) {
         req.session.user=user    // 将user存入session
         return res.redirect('/')
       }else{
-        return res.redirect('/')
+        return res.redirect('/signin') // 密码不对，重定向到登陆页
       }
     })
   })
 }
 
-//登出
-// app.get("/logout",function (req,res) {
-//
-// })
-
 exports.logout=function (req,res) {
   delete req.session.user  // 删除session,并重定向到首页
   // delete app.locals.user   // 清空本地变量上的user
-  res.redirect("/")
+  res.redirect("/signin")
 }
-
-// app.get('/admin/userList',function (req,res) {
-//
-// })
 
 exports.list=function (req,res) {
   User.fetch((err,doc)=>{
