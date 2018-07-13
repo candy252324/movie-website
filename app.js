@@ -38,11 +38,11 @@ app.use(session({
 
 // 开发环境配置
 if('development'===app.get("env")){
-  app.set("showStackError",true)  // 有错误，则在屏幕上打印
+  app.set("showStackError",true)   // 输出报错信息
   var logger=require("morgan")
   app.use(logger(":method :url :status"))  // 打印每一次请求方法，地址，状态
   app.locals.pretty=true;   //开发环境代码不压缩，增强可读性
-  mongoose.set("debug",true)
+  mongoose.set("debug",true)   // 数据库报错信息
 }
 
 require("./config/routes")(app)   // 将app作为参数传入

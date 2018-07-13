@@ -1,14 +1,24 @@
 var Movie=require("../models/movie")
+var Comment=require("../models/comment")
 var _=require('underscore')
 
 
 exports.detail=function (req,res) {
   var id=req.params.id
-  Movie.findById(id,(err,doc)=>{
-    res.render('detail',{
-      title:doc.title,
-      movie:doc
+  Movie.findById(id,(err,movie)=>{
+    // 查找该电影下对应的评论
+    Comment
+      .find({movie:id})
+      .populate("from","name")   // .populate("from",["name","role"])
+      .exec(function (err,comments) {
+        console.log(comments)
+        res.render('detail',{
+          title:movie.title,
+          movie:movie,
+          comments:comments,
+        })
     })
+
   })
 }
 
