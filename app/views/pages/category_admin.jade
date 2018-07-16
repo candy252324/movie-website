@@ -1,0 +1,13 @@
+extends ../layout
+block content
+    .container
+        form.form-horizontal(method="post",action="/admin/category")
+            //input(type="hidden",name="movie[_id]",value="#{movie._id}")
+            .form-group
+                label.col-sm-2.conrol-label(for="inputCategory") 电影分类
+                .col-sm-10
+                    //若写为value="#{category.name}"，则访问本录入界面，input框中会显示为undefined
+                    // 这里写为value=category.name，则jade会在渲染的时候判断是否为undefined,是的话默认为空
+                    input#inputCategory.form-control(type="text",name="category[name]",value=category.name)
+
+            button.btn.btn-default(type="submit") 录入

@@ -1,20 +1,10 @@
 var mongoose=require("mongoose")
-var Schema=mongoose.Schema;
-var ObjectId=Schema.Types.ObjectId;
+var Schema=mongoose.Schema
+var ObjectId=Schema.Types.ObjectId
 
-var MovieSchema=new Schema({
-  doctor:String,
-  title:String,
-  language:String,
-  country:String,
-  summary:String,
-  flash:String,
-  poster:String,
-  year:String,
-  category:{
-    type:ObjectId,
-    ref:"Category"
-  },
+var CategorySchema=new Schema({
+  name:String,
+  movies:[{type:ObjectId,ref:'Movie'}],  // 该分类下的电影的id
   meta:{
     createAt:{
       type:Date,
@@ -28,7 +18,7 @@ var MovieSchema=new Schema({
 })
 
 //pre save 每次存储数据之前都要调用这个方法
-MovieSchema.pre('save',function(next){
+CategorySchema.pre('save',function(next){
   //若为新增数据，则把它的创建时间和更新时间设置为当前时间
   if(this.isNew){
     this.meta.createAt=this.meta.updateAt=Date.now();
@@ -39,7 +29,7 @@ MovieSchema.pre('save',function(next){
 })
 
 //添加静态方法
-MovieSchema.statics={
+CategorySchema.statics={
   //fetch,用于查找出所有数据并按updateAt进行排序
   fetch:function (cb) {
     return this
@@ -55,4 +45,4 @@ MovieSchema.statics={
   }
 }
 //导出模式
-module.exports=MovieSchema;
+module.exports=CategorySchema;

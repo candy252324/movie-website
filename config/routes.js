@@ -2,6 +2,7 @@ var Index=require("../app/controllers/index")
 var Movie=require("../app/controllers/movie")
 var User=require("../app/controllers/user")
 var Comment=require("../app/controllers/comment")
+var Category=require("../app/controllers/category")
 
 module.exports=function (app) {
 
@@ -30,6 +31,11 @@ module.exports=function (app) {
   app.post("/admin/movie",User.signinRequeired, User.adminRequired,Movie.save)
   app.get('/admin/movie/list',User.signinRequeired, User.adminRequired,Movie.list)
   app.delete("/admin/movie/list",User.signinRequeired, User.adminRequired,Movie.del)
+
+  app.get('/admin/category/new',User.signinRequeired, User.adminRequired,Category.new)
+  app.post('/admin/category',User.signinRequeired, User.adminRequired,Category.save)
+  app.get('/admin/category/list',User.signinRequeired, User.adminRequired,Category.list)
+
 
   //Comment
   app.post('/user/comment',User.signinRequeired, Comment.save)
