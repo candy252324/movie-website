@@ -1,4 +1,5 @@
 var Movie=require("../models/movie")
+var Category=require("../models/category")
 var Comment=require("../models/comment")
 var _=require('underscore')
 
@@ -28,28 +29,26 @@ exports.detail=function (req,res) {
 }
 
 exports.new=function (req,res) {
-  res.render('admin',{
-    title:"后台录入页",
-    movie:{
-      title:"",
-      doctor:"",
-      country:"",
-      year:"",
-      poster:"",
-      language:"",
-      flash:"",
-      summary:"",
-    }
+  Category.find({},function (err,categories) {
+    res.render('admin',{
+      title:"后台录入页",
+      categories,
+      movie:{}
+    })
   })
+
 }
 
 exports.update=function (req,res) {
   var id=req.params.id;
   if(id){
     Movie.findById(id,(err,movie)=>{
-      res.render('admin',{
-        title:"后台更新页",
-        movie:movie
+      Category.find({},function (err,categories) {
+        res.render('admin',{
+          title:"后台更新页",
+          movie:movie,
+          categories
+        })
       })
     })
   }
@@ -59,7 +58,7 @@ exports.save=function (req,res) {
   var id=req.body.movie._id;
   var movieObj=req.body.movie;
   var _movie
-  if(id!=='undefined'){
+  if(id){
     Movie.findById(id,(err,movie)=>{
       if(err){
         console.log(err)
@@ -74,22 +73,20 @@ exports.save=function (req,res) {
       })
     })
   }else{
-    _movie=new Movie({
-      doctor:movieObj.doctor,
-      title:movieObj.title,
-      country:movieObj.country,
-      language:movieObj.language,
-      year:movieObj.year,
-      poster:movieObj.poster,
-      summary:movieObj.summary,
-      flash:movieObj.flash,
-    })
+    _movie=new Movie(movieObj)
+    var categoryId=_movie.category;
     _movie.save((err,movie)=> {
       if(err){
         console.log(err)
       }
-      //更新成功，页面重定向到详情页面
-      res.redirect('/movie/'+movie._id)
+      // 同时将电影存入分类表中
+      Category.findById(categoryId,function (err,category) {
+        category.movies.push(movie._id);
+        category.save(function (err,category) {
+          //更新成功，页面重定向到详情页面
+          res.redirect('/movie/'+movie._id)
+        });
+      })
     })
   }
 }
