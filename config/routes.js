@@ -39,6 +39,9 @@ module.exports=function (app) {
 
   //Comment
   app.post('/user/comment',User.signinRequeired, Comment.save)
+
+  //results
+  app.get('/results',Index.search)
 }
 
 
