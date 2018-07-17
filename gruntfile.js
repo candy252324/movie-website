@@ -84,7 +84,7 @@ module.exports=function (grunt) {
       options: {
         reporter: 'spec'
       },
-      src: ['test/**/*.js']
+      src: ['test/**/*.js']   // 要测试的目录
     },
 
     concurrent: {
@@ -97,6 +97,11 @@ module.exports=function (grunt) {
   grunt.loadNpmTasks("grunt-contrib-watch")  //grunt-contrib-watch插件，只要有文件发生变动，便会执行注册好的相应任务
   grunt.loadNpmTasks("grunt-nodemon")  //grunt-nodemon插件，实时监听app.js文件，发生变动则重启
   grunt.loadNpmTasks("grunt-concurrent")  //grunt-concurrent，针对慢任务（如sass,less编译）的插件，优化构建时间
+  grunt.loadNpmTasks("grunt-mocha-test")  //单元测试
+
   grunt.option('force',true)  //设为ture,则不会因为一些语法错误/警告而中断整个grunt任务
+
   grunt.registerTask("default",['concurrent'])  //注册一个concurrent任务
+
+  grunt.registerTask("test",['mochaTest'])  // 注册测试任务
 }

@@ -10,6 +10,7 @@
     "moment": "^2.22.2",
     "mongoose": "^5.2.2",
     "morgan": "^1.9.0",
+    "should": "^13.2.1",
     "underscore": "^1.9.1"
   },
   "name": "movie-website",
@@ -19,7 +20,9 @@
   "devDependencies": {
     "grunt-concurrent": "^2.3.1",
     "grunt-contrib-watch": "^1.1.0",
-    "grunt-nodemon": "^0.4.2"
+    "grunt-mocha-test": "^0.13.3",
+    "grunt-nodemon": "^0.4.2",
+    "mocha": "^5.2.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

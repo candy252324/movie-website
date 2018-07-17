@@ -1,6 +1,7 @@
 
 var express=require('express')
 var path=require('path')
+var fs=require('fs')
 var mongoose=require("mongoose")
 var bodyParser = require('body-parser')  // 中间件，将post请求body中的内容格式化为一个对象
 var multipart = require('connect-multiparty')  // 海报上传中间件，专门用于处理enctype='multipart/form-data'的表单提交过来的数据
@@ -14,6 +15,32 @@ var app=express()   //启动web服务器
 
 var dbUrl='mongodb://localhost/movies'
 mongoose.connect(dbUrl)
+
+//models loading
+// 作用，在其它地方可直接通过mongoose.model('User')的方式加载模型，而不需要require的方式
+var models_path=__dirname+'/app/models'
+var walk=function (path) {
+  fs
+    .readdirSync(path)
+    .forEach(function(file){
+      var newPath=path+"/"+file
+      var stat=fs.statSync(newPath)
+      // 如果是一个文件
+      if(stat.isFile()){
+        // 如果是一个js文件或coffee js文件，则加载
+        if(/(.*)\.(js|coffee)/.test(file)){
+          require(newPath)
+        }
+      }else if(stat.isDirectory){
+        // 如果是一个文件夹，则继续遍历
+        walk(newPath)
+      }
+    })
+}
+walk(models_path)  // 遍历加载文件
+
+
+
 mongoose.connection.on('connected',()=>{
   console.log("数据库连接成功")
 })
