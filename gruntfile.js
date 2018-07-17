@@ -32,8 +32,8 @@ module.exports=function (grunt) {
 
     jshint: {
       options: {
-        jshintrc: '.jshintrc',
-        ignores: ['public/libs/**/*.js']
+        jshintrc: '.jshintrc',  //检查时依赖的文件
+        ignores: ['public/libs/**/*.js']  // 忽略语法检查的文件
       },
       all: ['public/js/*.js', 'test/**/*.js', 'app/**/*.js']
     },
@@ -98,6 +98,9 @@ module.exports=function (grunt) {
   grunt.loadNpmTasks("grunt-nodemon")  //grunt-nodemon插件，实时监听app.js文件，发生变动则重启
   grunt.loadNpmTasks("grunt-concurrent")  //grunt-concurrent，针对慢任务（如sass,less编译）的插件，优化构建时间
   grunt.loadNpmTasks("grunt-mocha-test")  //单元测试
+  grunt.loadNpmTasks("grunt-contrib-less")  //less编译
+  grunt.loadNpmTasks("grunt-contrib-uglify")  //js压缩
+  grunt.loadNpmTasks("grunt-contrib-jshint")  //语法检查
 
   grunt.option('force',true)  //设为ture,则不会因为一些语法错误/警告而中断整个grunt任务
 
