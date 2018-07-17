@@ -11,6 +11,10 @@ var MovieSchema=new Schema({
   flash:String,
   poster:String,
   year:String,
+  pv:{
+    type:Number,
+    default:0   // 访问量（page view）
+  },
   category:{
     type:ObjectId,
     ref:"Category"

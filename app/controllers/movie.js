@@ -7,6 +7,12 @@ var path=require('path')  // 路径模块
 
 exports.detail=function (req,res) {
   var id=req.params.id
+  //没查看一次详情，该电影访问量+1
+  Movie.update({_id:id},{$inc:{pv:1}},function (err) {
+    if(err){
+      console.log(err)
+    }
+  })
   Movie.findById(id,(err,movie)=>{
     // 查找该电影下对应的评论
     Comment
