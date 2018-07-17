@@ -2,7 +2,8 @@ var Movie=require("../models/movie")
 var Category=require("../models/category")
 var Comment=require("../models/comment")
 var _=require('underscore')
-
+var fs=require('fs')   // 读取文件模块
+var path=require('path')  // 路径模块
 
 exports.detail=function (req,res) {
   var id=req.params.id
@@ -54,10 +55,39 @@ exports.update=function (req,res) {
   }
 }
 
+// 由于海报的上传是异步的，需要严格控制必须上传成功之后才可以存储数据
+exports.savePoster=function (req,res,next) {
+  var posterData=req.files.uploadPoster;
+  var filePath=posterData.path;   // 文件路径
+  var originalFilename=posterData.originalFilename;   //原始名字
+
+  //若名字存在，则认为在传文件
+   if(originalFilename){
+     fs.readFile(filePath,function (err,data) {
+       var timestamp=Date.now();
+       var type=posterData.type.split("/")[1];  //文件类型,posterData.type格式为'image/jpeg'
+       var poster=timestamp+'.'+type  // 文件新名字
+       var newPath=path.join(__dirname, '../../', '/public/upload/'+ poster)  // 文件存储地址
+       // 写入文件
+       fs.writeFile(newPath,data,function (err) {
+         req.poster=poster  // 写入成功后的文件名字挂到req上
+         next()
+       })
+     })
+   }else{
+     next()
+   }
+}
+
 exports.save=function (req,res) {
   var id=req.body.movie._id;
   var movieObj=req.body.movie;
   var _movie
+
+  if(req.poster){
+    movieObj.poster=req.poster;
+  }
+
   if(id){
     Movie.findById(id,(err,movie)=>{
       if(err){

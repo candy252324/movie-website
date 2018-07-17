@@ -1,7 +1,8 @@
 extends ../layout
 block content
     .container
-        form.form-horizontal(method="post",action="/admin/movie")
+        //enctype 属性规定在发送到服务器之前应该如何对表单数据进行编码
+        form.form-horizontal(method="post",action="/admin/movie",enctype='multipart/form-data')
             .form-group
                 label.col-sm-2.conrol-label 豆瓣同步
                 .col-sm-10
@@ -45,6 +46,10 @@ block content
                 label.col-sm-2.conrol-label(for="inputPoster") 海报地址
                 .col-sm-10
                     input#inputPoster.form-control(type="text",name="movie[poster]",value=movie.poster)
+            .form-group
+                label.col-sm-2.conrol-label(for="uploadPoster") 海报上传
+                .col-sm-10
+                    input#uploadPoster(type="file",name="uploadPoster")
             .form-group
                 label.col-sm-2.conrol-label(for="inputFlash") 片源地址
                 .col-sm-10

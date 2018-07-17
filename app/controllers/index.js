@@ -22,8 +22,6 @@ exports.index=function (req,res) {
 
 //search
 exports.search=function (req,res) {
-  console.log("111111111111111111111111111111111")
-  console.log(req.query)
   var catId=req.query.cat;
   var q=req.query.q;  // 搜索框内容
   var page=parseInt(req.query.p,10)||0;  // 搜索框搜索时，默认给0

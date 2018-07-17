@@ -3,6 +3,7 @@ var express=require('express')
 var path=require('path')
 var mongoose=require("mongoose")
 var bodyParser = require('body-parser')  // 中间件，将post请求body中的内容格式化为一个对象
+var multipart = require('connect-multiparty')  // 海报上传中间件，专门用于处理enctype='multipart/form-data'的表单提交过来的数据
 
 var cookieParser = require('cookie-parser')
 var session = require('express-session')
@@ -26,6 +27,7 @@ mongoose.connection.on('disconnected',()=>{
 app.set("views","./app/views/pages")   //设置视图根目录
 app.set("view engine","jade")   //设置视图模板引擎
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use(multipart());
 
 app.use(cookieParser())  // session依赖于cookieParser
 app.use(session({
